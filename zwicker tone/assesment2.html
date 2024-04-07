@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/b0755956c8.js" crossorigin="anonymous"></script>
+    <title>Zwicker Tone</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center" style="font-weight:bold;font-family:Roboto;">Residual Inhibition measurement with Zwicker Tone</h1>
+        <p style="font-family:Roboto;margin:8px"> Introducing an advanced feature in our Residual Inhibition Assessment that takes your tinnitus understanding to the next level. This addition offers a unique perspective into the characteristics of your perceived tinnitus. After exposure to the pure tone, we'll introduce the Zwicker tone illusion. When the noise is switched off, be attentive to whether a faint tone, similar to your tinnitus, lingers for several seconds. When it ends, click on Stop Timer</p>
+        <div class="d-flex flex-row justify-content-center">
+            <button class="btn btn-primary m-5" style="background-color:#b079d9;" onclick="startStopwatch()">Start Test</button>
+            <button class="btn btn-primary m-5" style="background-color:#b079d9;" onclick="stopStopwatch()">Stop Timer</button>
+        </div>
+        <div class="d-flex flex-row justify-content-center row">
+            <div class="col-4 stopwatch-class" style="border" id="timeDisplay">00:00:00</div>
+        </div>
+    </div>
+    <script>
+        let timer;
+        let timerInterval;
+
+        function stopwatchWithExtendedToneAutomatic() {
+            let elapsedTime = 0;
+            let isRunning = false;
+            let audioContext = new(window.AudioContext || window.webkitAudioContext)();
+            let timeDisplay = document.getElementById('timeDisplay');
+
+            function toneCallback() {
+                const frequency = 4000;
+                const duration = 10;
+                const sampleRate = 44100;
+                const audioBuffer = audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = audioBuffer.getChannelData(0);
+
+                for (let i = 0; i < duration * sampleRate; i++) {
+                    data[i] = Math.sin(2 * Math.PI * frequency * i / sampleRate);
+                }
+
+                const source = audioContext.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(audioContext.destination);
+                source.start();
+
+                timer = setTimeout(() => {
+                    startTimer();
+                }, duration * 1000);
+            }
+
+            function startTimer() {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (isRunning) {
+                        elapsedTime += 1;
+                        timeDisplay.textContent = formatTime(elapsedTime);
+                    }
+                }, 1000);
+            }
+
+            function stopTimer() {
+                isRunning = false;
+                clearInterval(timerInterval);
+                const formattedTime = formatTime(elapsedTime);
+                timeDisplay.textContent = formattedTime;
+                alert(`Elapsed Time: ${formattedTime}`);
+            }
+
+            function formatTime(seconds) {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds - hours * 3600) / 60);
+                const remainingSeconds = seconds - hours * 3600 - minutes * 60;
+                return `${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}:${('0' + remainingSeconds).slice(-2)}`;
+            }
+
+            toneCallback();
+        }
+
+        function startStopwatch() {
+            stopwatchWithExtendedToneAutomatic();
+        }
+
+        function stopStopwatch() {
+            clearTimeout(timer);
+            clearInterval(timerInterval);
+        }
+    </script>
+</body>
+
+</html>

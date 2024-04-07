@@ -8,11 +8,11 @@
     
      <fragment 
 	    android:id="@+id/navigation_app"
-	    android:name="com.example.Maskingwhite.AppFragment"
+	    android:name="com.example.Musicmask.AppFragment"
 	    android:label="App"
 	    tools:layout="@layout/fragment_app" /><fragment 
 	    android:id="@+id/navigation_info"
-	    android:name="com.example.Maskingwhite.InfoFragment"
+	    android:name="com.example.Musicmask.InfoFragment"
 	    android:label="Info"
 	    tools:layout="@layout/fragment_info" />
     

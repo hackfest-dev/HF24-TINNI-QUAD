@@ -3,7 +3,7 @@
 <!--   Copyright 2017-2022 The MathWorks, Inc. -->
 
 <resources>
-    <string name="app_name">Maskingwhite</string>
+    <string name="app_name">Musicmask</string>
     <string name="thingspeak_title">ThingSpeak Logs</string>
     <string name="tcp_title">TCP Logs</string>
     <string name="mqtt_title">MQTT Logs</string>
@@ -27,5 +27,7 @@
 <!-- Auto Generated strings start-->
 
 <!-- Auto Generated strings end-->
+
+
   
 </resources>
